@@ -82,8 +82,10 @@ class RouteNotifier extends StateNotifier<RouteState> {
       state = RouteState(route: route);
     } on ApiException catch (e) {
       state = RouteState(error: e.message);
+    } on NetworkException catch (e) {
+      state = RouteState(error: e.message);
     } catch (e) {
-      state = RouteState(error: '루트 생성 중 오류가 발생했습니다');
+      state = RouteState(error: '알 수 없는 오류가 발생했습니다');
     }
   }
 

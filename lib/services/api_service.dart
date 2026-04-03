@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../models/preference.dart';
 import '../models/chat_message.dart';
@@ -48,11 +50,19 @@ class ApiService {
     Map<String, dynamic> body,
   ) async {
     final uri = Uri.parse('$apiBaseUrl$path');
-    final response = await _client.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(body),
-    );
+
+    late final http.Response response;
+    try {
+      response = await _client.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+    } on SocketException {
+      throw const NetworkException('SocketException');
+    } on TimeoutException {
+      throw const NetworkException('TimeoutException');
+    }
 
     if (response.statusCode != 200) {
       final error = jsonDecode(response.body);
@@ -76,4 +86,14 @@ class ApiException implements Exception {
 
   @override
   String toString() => 'ApiException($statusCode): $message';
+}
+
+class NetworkException implements Exception {
+  final String cause;
+  const NetworkException(this.cause);
+
+  String get message => '네트워크 연결을 확인해주세요';
+
+  @override
+  String toString() => 'NetworkException($cause): $message';
 }

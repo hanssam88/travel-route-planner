@@ -52,8 +52,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
       );
     } on ApiException catch (e) {
       state = state.copyWith(isLoading: false, error: e.message);
+    } on NetworkException catch (e) {
+      state = state.copyWith(isLoading: false, error: e.message);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: '네트워크 오류가 발생했습니다');
+      state = state.copyWith(isLoading: false, error: '알 수 없는 오류가 발생했습니다');
     }
   }
 
@@ -78,8 +80,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
       );
     } on ApiException catch (e) {
       state = state.copyWith(isLoading: false, error: e.message);
+    } on NetworkException catch (e) {
+      state = state.copyWith(isLoading: false, error: e.message);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: '네트워크 오류가 발생했습니다');
+      state = state.copyWith(isLoading: false, error: '알 수 없는 오류가 발생했습니다');
     }
   }
 
