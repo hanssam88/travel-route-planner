@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모바일 바텀시트 레이아웃 목업</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Noto Sans KR', sans-serif; background: #f5f5f5; display: flex; justify-content: center; gap: 40px; padding: 40px; flex-wrap: wrap; }
+
+  .phone-frame {
+    width: 375px; height: 812px; border-radius: 40px; overflow: hidden;
+    border: 8px solid #1a1a1a; position: relative; background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  /* Map area */
+  .map-area {
+    width: 100%; height: 100%; background: #e8f0e8; position: relative;
+    background-image:
+      linear-gradient(rgba(200,220,200,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,220,200,0.5) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .map-label {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -80%);
+    font-size: 13px; color: #666; text-align: center;
+  }
+
+  /* Markers on map */
+  .marker {
+    position: absolute; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .marker.meal { background: #FF5722; }
+  .marker.cafe { background: #795548; }
+  .marker-1 { top: 25%; left: 30%; }
+  .marker-2 { top: 20%; left: 55%; }
+  .marker-3 { top: 40%; left: 45%; }
+  .marker-4 { top: 35%; left: 65%; }
+  .marker-5 { top: 50%; left: 38%; }
+
+  /* Polyline (simplified) */
+  .polyline { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+  .polyline svg { width: 100%; height: 100%; }
+
+  /* Bottom Sheet */
+  .bottom-sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #fff; border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease;
+  }
+
+  .sheet-handle {
+    width: 36px; height: 4px; background: #ddd; border-radius: 2px;
+    margin: 10px auto 8px;
+  }
+
+  .sheet-header {
+    padding: 4px 20px 12px; border-bottom: 1px solid #f0f0f0;
+  }
+  .sheet-header h3 { font-size: 15px; color: #333; margin-bottom: 6px; }
+  .sheet-chips { display: flex; gap: 8px; }
+  .chip {
+    font-size: 11px; padding: 4px 10px; border-radius: 12px;
+    background: #FBE9E7; color: #BF360C; display: flex; align-items: center; gap: 4px;
+  }
+
+  .sheet-body { padding: 12px 20px 30px; overflow-y: auto; }
+
+  /* Route cards */
+  .route-card {
+    display: flex; align-items: flex-start; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .route-card:last-child { border-bottom: none; }
+
+  .card-number {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 13px;
+  }
+  .card-number.meal { background: #FF5722; }
+  .card-number.cafe { background: #795548; }
+
+  .card-content { flex: 1; }
+  .card-slot { font-size: 11px; color: #FF5722; font-weight: 600; margin-bottom: 2px; }
+  .card-name { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 3px; }
+  .card-reason { font-size: 12px; color: #888; line-height: 1.4; }
+  .card-budget { font-size: 12px; color: #666; margin-top: 4px; }
+
+  /* Segment divider */
+  .segment {
+    display: flex; align-items: center; gap: 8px; padding: 6px 0 6px 10px;
+    color: #aaa; font-size: 11px;
+  }
+  .segment-line { width: 2px; height: 16px; background: #e0e0e0; margin-left: 13px; }
+  .segment-icon { font-size: 14px; }
+
+  /* States */
+  .state-label {
+    position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+    background: #1a1a1a; color: #fff; padding: 6px 16px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; z-index: 10; white-space: nowrap;
+  }
+
+  /* Peek state - show only header */
+  .phone-frame.peek .bottom-sheet { height: 140px; }
+  .phone-frame.peek .sheet-body { display: none; }
+
+  /* Half state - 50% */
+  .phone-frame.half .bottom-sheet { height: 55%; }
+  .phone-frame.half .sheet-body { max-height: 280px; }
+
+  /* Full state - 85% */
+  .phone-frame.full .bottom-sheet { height: 85%; }
+  .phone-frame.full .sheet-body { max-height: 520px; }
+
+  /* Description */
+  .desc-section { text-align: center; margin-top: 20px; max-width: 900px; }
+  .desc-section h2 { font-size: 20px; color: #333; margin-bottom: 16px; }
+  .desc-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .desc-table th { padding: 10px 16px; background: #f9f9f9; font-size: 13px; color: #666; border-bottom: 2px solid #eee; }
+  .desc-table td { padding: 10px 16px; font-size: 13px; color: #444; border-bottom: 1px solid #f0f0f0; }
+  .desc-table td:first-child { font-weight: 600; white-space: nowrap; }
+
+  .interaction-note {
+    margin-top: 24px; padding: 16px 20px; background: #FFF3E0; border-radius: 12px;
+    font-size: 13px; color: #E65100; line-height: 1.6; text-align: left;
+  }
+  .interaction-note strong { display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Peek State -->
+<div class="phone-frame peek">
+  <div class="state-label">Peek (접힌 상태)</div>
+  <div class="map-area">
+    <svg class="polyline" viewBox="0 0 375 812"><polyline points="115,210 210,170 172,335 248,295 145,415" fill="none" stroke="#888" stroke-width="2" stroke-dasharray="6,4"/></svg>
+    <div class="marker meal marker-1">1</div>
+    <div class="marker cafe marker-2">2</div>
+    <div class="marker meal marker-3">3</div>
+    <div class="marker cafe marker-4">4</div>
+    <div class="marker meal marker-5">5</div>
+    <div class="map-label">지도가 전체 화면으로 보임<br>바텀시트를 위로 스와이프하여 리스트 확인</div>
+  </div>
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3>강릉 맛집 투어 루트</h3>
+      <div class="sheet-chips">
+        <span class="chip">💰 약 85,000원</span>
+        <span class="chip">🕐 6시간 30분</span>
+        <span class="chip">📍 12.3km</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Half State -->
+<div class="phone-frame half">
+  <div class="state-label">Half (절반 펼침)</div>
+  <div class="map-area">
+    <svg class="polyline" viewBox="0 0 375 812"><polyline points="115,210 210,170 172,335 248,295 145,415" fill="none" stroke="#888" stroke-width="2" stroke-dasharray="6,4"/></svg>
+    <div class="marker meal marker-1">1</div>
+    <div class="marker cafe marker-2">2</div>
+    <div class="marker meal marker-3">3</div>
+    <div class="marker cafe marker-4">4</div>
+    <div class="marker meal marker-5">5</div>
+  </div>
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3>강릉 맛집 투어 루트</h3>
+      <div class="sheet-chips">
+        <span class="chip">💰 약 85,000원</span>
+        <span class="chip">🕐 6시간 30분</span>
+        <span class="chip">📍 12.3km</span>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <div class="route-card">
+        <div class="card-number meal">1</div>
+        <div class="card-content">
+          <div class="card-slot">아침</div>
+          <div class="card-name">순두부젤라또</div>
+          <div class="card-reason">강릉 명물 순두부를 젤라또로 재해석한 인기 맛집</div>
+          <div class="card-budget">💰 약 12,000원</div>
+        </div>
+      </div>
+      <div class="segment">
+        <div class="segment-line"></div>
+        <span class="segment-icon">🚗</span> 차량 10분 · 3.2km
+      </div>
+      <div class="route-card">
+        <div class="card-number cafe">2</div>
+        <div class="card-content">
+          <div class="card-slot">오전 카페</div>
+          <div class="card-name">테라로사 커피공장</div>
+          <div class="card-reason">강릉 커피 문화의 시작점, 넓은 공간과 로스팅 체험</div>
+          <div class="card-budget">💰 약 8,000원</div>
+        </div>
+      </div>
+      <div class="segment">
+        <div class="segment-line"></div>
+        <span class="segment-icon">🚗</span> 차량 15분 · 5.1km
+      </div>
+      <div class="route-card">
+        <div class="card-number meal">3</div>
+        <div class="card-content">
+          <div class="card-slot">점심</div>
+          <div class="card-name">교동반점</div>
+          <div class="card-reason">강릉 3대 짬뽕, 얼큰한 해물 육수가 일품</div>
+          <div class="card-budget">💰 약 15,000원</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full State -->
+<div class="phone-frame full">
+  <div class="state-label">Full (전체 펼침)</div>
+  <div class="map-area">
+    <svg class="polyline" viewBox="0 0 375 812"><polyline points="115,210 210,170 172,335 248,295 145,415" fill="none" stroke="#888" stroke-width="2" stroke-dasharray="6,4"/></svg>
+    <div class="marker meal marker-1">1</div>
+    <div class="marker cafe marker-2">2</div>
+    <div class="marker meal marker-3">3</div>
+    <div class="marker cafe marker-4">4</div>
+    <div class="marker meal marker-5">5</div>
+  </div>
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3>강릉 맛집 투어 루트</h3>
+      <div class="sheet-chips">
+        <span class="chip">💰 약 85,000원</span>
+        <span class="chip">🕐 6시간 30분</span>
+        <span class="chip">📍 12.3km</span>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <div class="route-card">
+        <div class="card-number meal">1</div>
+        <div class="card-content">
+          <div class="card-slot">아침</div>
+          <div class="card-name">순두부젤라또</div>
+          <div class="card-reason">강릉 명물 순두부를 젤라또로 재해석한 인기 맛집</div>
+          <div class="card-budget">💰 약 12,000원</div>
+        </div>
+      </div>
+      <div class="segment">
+        <div class="segment-line"></div>
+        <span class="segment-icon">🚗</span> 차량 10분 · 3.2km
+      </div>
+      <div class="route-card">
+        <div class="card-number cafe">2</div>
+        <div class="card-content">
+          <div class="card-slot">오전 카페</div>
+          <div class="card-name">테라로사 커피공장</div>
+          <div class="card-reason">강릉 커피 문화의 시작점, 넓은 공간과 로스팅 체험</div>
+          <div class="card-budget">💰 약 8,000원</div>
+        </div>
+      </div>
+      <div class="segment">
+        <div class="segment-line"></div>
+        <span class="segment-icon">🚗</span> 차량 15분 · 5.1km
+      </div>
+      <div class="route-card">
+        <div class="card-number meal">3</div>
+        <div class="card-content">
+          <div class="card-slot">점심</div>
+          <div class="card-name">교동반점</div>
+          <div class="card-reason">강릉 3대 짬뽕, 얼큰한 해물 육수가 일품</div>
+          <div class="card-budget">💰 약 15,000원</div>
+        </div>
+      </div>
+      <div class="segment">
+        <div class="segment-line"></div>
+        <span class="segment-icon">🚗</span> 차량 8분 · 2.5km
+      </div>
+      <div class="route-card">
+        <div class="card-number cafe">4</div>
+        <div class="card-content">
+          <div class="card-slot">오후 카페</div>
+          <div class="card-name">봉봉방앗간</div>
+          <div class="card-reason">한옥 카페, 수제 콩떡과 미숫가루 라떼가 시그니처</div>
+          <div class="card-budget">💰 약 10,000원</div>
+        </div>
+      </div>
+      <div class="segment">
+        <div class="segment-line"></div>
+        <span class="segment-icon">🚗</span> 차량 12분 · 4.0km
+      </div>
+      <div class="route-card">
+        <div class="card-number meal">5</div>
+        <div class="card-content">
+          <div class="card-slot">저녁</div>
+          <div class="card-name">영진해장국</div>
+          <div class="card-reason">40년 전통 해장국, 현지인이 추천하는 저녁 마무리</div>
+          <div class="card-budget">💰 약 13,000원</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Description -->
+<div class="desc-section">
+  <h2>바텀시트 인터랙션 설계</h2>
+  <table class="desc-table">
+    <tr><th>상태</th><th>높이</th><th>동작</th><th>지도</th></tr>
+    <tr>
+      <td>Peek (접힘)</td>
+      <td>~140px</td>
+      <td>헤더(제목+요약칩)만 노출. 위로 스와이프하면 Half로 전환</td>
+      <td>전체 화면, 모든 마커+폴리라인 보임</td>
+    </tr>
+    <tr>
+      <td>Half (절반)</td>
+      <td>~55%</td>
+      <td>리스트 스크롤 가능. 위로 스와이프→Full, 아래→Peek</td>
+      <td>상단 45%에 축소 표시, 선택 마커 자동 포커스</td>
+    </tr>
+    <tr>
+      <td>Full (전체)</td>
+      <td>~85%</td>
+      <td>전체 리스트 탐색. 아래로 스와이프→Half</td>
+      <td>상단 15%에 미니맵 형태</td>
+    </tr>
+  </table>
+
+  <div class="interaction-note">
+    <strong>카드-지도 연동 (기존 유지)</strong>
+    - 카드 탭 → 지도 해당 마커로 카메라 이동 + 마커 하이라이트<br>
+    - 마커 탭 → 바텀시트가 Half로 열리며 해당 카드로 자동 스크롤<br>
+    - 바텀시트 상태와 무관하게 양방향 동기화 작동
+  </div>
+</div>
+
+</body>
+</html>

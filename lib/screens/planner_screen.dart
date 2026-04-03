@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import '../models/travel_route.dart';
 import '../providers/preference_provider.dart';
 import '../providers/chat_provider.dart';
 import '../providers/route_provider.dart';
+import '../utils/responsive.dart';
 import '../widgets/chat/preference_chips.dart';
 import '../widgets/chat/chat_panel.dart';
-import '../widgets/route/route_timeline.dart';
+import '../widgets/common/error_retry.dart';
 import '../widgets/map/route_map.dart';
+import '../widgets/route/route_bottom_sheet.dart';
+import '../widgets/route/route_desktop_view.dart';
+import '../widgets/route/route_loading.dart';
 
 enum PlannerStep { preference, chat, route }
 
@@ -44,15 +49,12 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     });
   }
 
-  /// 하단 리스트에서 장소 카드 탭 → 지도가 해당 마커로 이동
   void _onPlaceTapFromList(int index) {
     setState(() => _selectedPlaceIndex = index);
   }
 
-  /// 지도에서 마커 탭 → 하단 리스트가 해당 카드로 스크롤
   void _onMarkerTapFromMap(int index) {
     setState(() => _selectedPlaceIndex = index);
-    // placeIndex → 리스트 아이템 index (짝수 = 장소)
     final listIndex = index * 2;
     _itemScrollController.scrollTo(
       index: listIndex,
@@ -94,69 +96,56 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
 
   Widget _buildRouteView(RouteState routeState) {
     if (routeState.isLoading) {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('AI가 최적의 루트를 생성하고 있습니다...'),
-            SizedBox(height: 8),
-            Text(
-              '맛집 검색 + 리뷰 분석 + 경로 최적화',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-      );
+      return const RouteLoading();
     }
 
     if (routeState.error != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
-            const SizedBox(height: 16),
-            Text(routeState.error!),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () =>
-                  ref.read(routeProvider.notifier).generateRoute(),
-              child: const Text('다시 시도'),
-            ),
-          ],
+      return ErrorRetry(
+        message: routeState.error!,
+        onRetry: () => ref.read(routeProvider.notifier).generateRoute(),
+      );
+    }
+
+    if (routeState.route == null) {
+      return const Center(child: Text('루트를 생성해주세요'));
+    }
+
+    final route = routeState.route!;
+
+    if (isMobile(context)) {
+      return _buildMobileRouteView(route);
+    }
+    return _buildDesktopRouteView(route);
+  }
+
+  Widget _buildMobileRouteView(TravelRoute route) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: RouteMap(
+            places: route.places,
+            selectedIndex: _selectedPlaceIndex,
+            onMarkerTap: (index) {
+              setState(() => _selectedPlaceIndex = index);
+            },
+          ),
         ),
-      );
-    }
+        RouteBottomSheet(
+          route: route,
+          onPlaceTap: _onPlaceTapFromList,
+          selectedPlaceIndex: _selectedPlaceIndex,
+        ),
+      ],
+    );
+  }
 
-    if (routeState.route != null) {
-      return Column(
-        children: [
-          // 상단: 카카오 맵 (40%, 최소 200px)
-          ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 200),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: RouteMap(
-                places: routeState.route!.places,
-                selectedIndex: _selectedPlaceIndex,
-                onMarkerTap: _onMarkerTapFromMap,
-              ),
-            ),
-          ),
-          // 하단: 루트 타임라인 (60%)
-          Expanded(
-            child: RouteTimeline(
-              route: routeState.route!,
-              onPlaceTap: _onPlaceTapFromList,
-              itemScrollController: _itemScrollController,
-            ),
-          ),
-        ],
-      );
-    }
-
-    return const Center(child: Text('루트를 생성해주세요'));
+  Widget _buildDesktopRouteView(TravelRoute route) {
+    return RouteDesktopView(
+      route: route,
+      selectedPlaceIndex: _selectedPlaceIndex,
+      onPlaceTap: _onPlaceTapFromList,
+      onMarkerTap: _onMarkerTapFromMap,
+      itemScrollController: _itemScrollController,
+    );
   }
 }
