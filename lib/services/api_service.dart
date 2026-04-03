@@ -7,6 +7,9 @@ import '../models/chat_message.dart';
 import '../utils/constants.dart';
 
 class ApiService {
+  // 빌드 시 --dart-define=API_KEY=... 로 주입
+  static const _apiKey = String.fromEnvironment('API_KEY', defaultValue: '');
+
   final http.Client _client;
 
   ApiService({http.Client? client}) : _client = client ?? http.Client();
@@ -55,7 +58,10 @@ class ApiService {
     try {
       response = await _client.post(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': _apiKey,
+        },
         body: jsonEncode(body),
       );
     } on SocketException {
