@@ -22,6 +22,16 @@ const List<String> foodCategories = [
   '비건',
 ];
 
+// 카카오 맵 설정
+const double defaultMapLat = 37.5665; // 서울시청 위도
+const double defaultMapLng = 126.9780; // 서울시청 경도
+const int defaultMapZoomLevel = 12;
+
+// 마커 색상
+const int markerColorMeal = 0xFFFF5722; // 주황 (deepOrange)
+const int markerColorCafe = 0xFF795548; // 갈색 (brown)
+const int polylineColor = 0xFF888888; // 회색
+
 // 인기 여행 지역
 const List<String> popularRegions = [
   '강릉',

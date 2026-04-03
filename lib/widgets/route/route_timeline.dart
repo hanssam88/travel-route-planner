@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../models/travel_route.dart';
 import '../../models/route_segment.dart';
 import 'route_card.dart';
@@ -6,11 +7,13 @@ import 'route_card.dart';
 class RouteTimeline extends StatelessWidget {
   final TravelRoute route;
   final void Function(int index)? onPlaceTap;
+  final ItemScrollController? itemScrollController;
 
   const RouteTimeline({
     super.key,
     required this.route,
     this.onPlaceTap,
+    this.itemScrollController,
   });
 
   @override
@@ -60,7 +63,8 @@ class RouteTimeline extends StatelessWidget {
 
         // 장소 + 구간 리스트
         Expanded(
-          child: ListView.builder(
+          child: ScrollablePositionedList.builder(
+            itemScrollController: itemScrollController,
             padding: const EdgeInsets.symmetric(vertical: 8),
             itemCount: route.places.length + route.segments.length,
             itemBuilder: (context, index) {
