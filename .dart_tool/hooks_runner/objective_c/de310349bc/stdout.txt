@@ -1,0 +1,55 @@
+Running `(cd /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/; TMPDIR=/var/folders/x4/fz_yp0cs6cj767yz0d1fr77r0000gn/T/ PATH=/Users/sengmindavidhyun/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/opt/homebrew/bin:/Users/sengmindavidhyun/.local/bin HOME=/Users/sengmindavidhyun /opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/package_config.json /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/objective_c/de310349bc/hook.dill --config=/Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/objective_c/de310349bc/input.json )`.
+INFO: 2026-04-03 17:13:21.617127: Running `/Library/Developer/CommandLineTools/usr/bin/clang --version`.
+
+INFO: 2026-04-03 17:13:21.626060: Running `/Library/Developer/CommandLineTools/usr/bin/clang --version`.
+
+INFO: 2026-04-03 17:13:21.635945: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/include/dart_api_dl.c -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-04-03 17:13:21.636256: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.c -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c.c.o
+
+INFO: 2026-04-03 17:13:21.636445: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/test/util.c -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/test/util.c.o
+
+INFO: 2026-04-03 17:13:21.636616: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/input_stream_adapter.m -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-04-03 17:13:21.636708: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.m -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c.m.o
+
+INFO: 2026-04-03 17:13:21.636854: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/ns_number.m -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/ns_number.m.o
+
+INFO: 2026-04-03 17:13:21.636947: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/protocol.m -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/protocol.m.o
+
+INFO: 2026-04-03 17:13:21.637111: Running: /Library/Developer/CommandLineTools/usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/sengmindavidhyun/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c_bindings_generated.m -fpic -I src -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-04-03 17:13:21.741779: 
+INFO: 2026-04-03 17:13:21.741799: 
+INFO: 2026-04-03 17:13:21.741806: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/test/util.c.o
+
+o
+
+INFO: 2026-04-03 17:13:21.742275: 
+INFO: 2026-04-03 17:13:21.742326: 
+INFO: 2026-04-03 17:13:21.742338: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-04-03 17:13:21.742553: 
+INFO: 2026-04-03 17:13:21.742566: 
+INFO: 2026-04-03 17:13:21.742573: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/protocol.m.o
+
+INFO: 2026-04-03 17:13:21.912087: 
+INFO: 2026-04-03 17:13:21.912122: 
+INFO: 2026-04-03 17:13:21.912130: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/ns_number.m.o
+
+INFO: 2026-04-03 17:13:21.919677: 
+INFO: 2026-04-03 17:13:21.919684: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c.m.o
+
+e310349bc/obj/src/input_stream_adapter.m.o
+INFO: 2026-04-03 17:13:21.919669: 
+
+INFO: 2026-04-03 17:13:21.927658: 
+INFO: 2026-04-03 17:13:21.927680: 
+INFO: 2026-04-03 17:13:21.927692: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-04-03 17:13:21.927923: Running: /Library/Developer/CommandLineTools/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -target arm64-apple-darwin -mmacos-version-min=13 /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/include/dart_api_dl.c.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c.c.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/test/util.c.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/input_stream_adapter.m.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c.m.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/observer.m.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/ns_number.m.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/protocol.m.o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/obj/src/objective_c_bindings_generated.m.o -o /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/objective_c.dylib
+
+INFO: 2026-04-03 17:13:21.958834: 
+INFO: 2026-04-03 17:13:21.958877: 
+INFO: 2026-04-03 17:13:21.958891: Generated /Users/sengmindavidhyun/Documents/David/projects/travel_route_planner/.dart_tool/hooks_runner/shared/objective_c/build/de310349bc/objective_c.dylib
+
