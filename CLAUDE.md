@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # travel-route-planner (AI 여행 루트 플래너 Flutter 앱)
 
 ## 프로젝트 개요

@@ -71,11 +71,14 @@ class ApiService {
     }
 
     if (response.statusCode != 200) {
-      final error = jsonDecode(response.body);
-      throw ApiException(
-        statusCode: response.statusCode,
-        message: error['error'] as String? ?? '알 수 없는 오류',
-      );
+      String message = '오류 (${response.statusCode})';
+      try {
+        final error = jsonDecode(response.body);
+        message = error['error'] as String? ?? message;
+      } catch (_) {
+        message = 'HTTP ${response.statusCode}';
+      }
+      throw ApiException(statusCode: response.statusCode, message: message);
     }
 
     return jsonDecode(response.body) as Map<String, dynamic>;
