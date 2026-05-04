@@ -30,6 +30,7 @@ class RouteDesktopView extends StatelessWidget {
             height: MediaQuery.sizeOf(context).height * 0.4,
             child: RouteMap(
               places: route.places,
+              segments: route.segments,
               selectedIndex: selectedPlaceIndex,
               onMarkerTap: onMarkerTap,
             ),

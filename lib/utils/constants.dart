@@ -30,7 +30,8 @@ const int defaultMapZoomLevel = 12;
 // 마커 색상
 const int markerColorMeal = 0xFFFF5722; // 주황 (deepOrange)
 const int markerColorCafe = 0xFF795548; // 갈색 (brown)
-const int polylineColor = 0xFF888888; // 회색
+const int polylineColor = 0xFF888888; // 회색 (직선 fallback)
+const int polylineRealPathColor = 0xFF1E88E5; // 파랑 (실제 경로)
 
 // 인기 여행 지역
 const List<String> popularRegions = [

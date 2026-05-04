@@ -10,6 +10,7 @@ import '../widgets/chat/preference_chips.dart';
 import '../widgets/chat/chat_panel.dart';
 import '../widgets/common/error_retry.dart';
 import '../widgets/map/route_map.dart';
+import '../widgets/route/editable_route_timeline.dart';
 import '../widgets/route/route_bottom_sheet.dart';
 import '../widgets/route/route_desktop_view.dart';
 import '../widgets/route/route_loading.dart';
@@ -74,6 +75,13 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
           PlannerStep.route => '추천 루트',
         }),
         actions: [
+          if (_step == PlannerStep.route && routeState.route != null)
+            IconButton(
+              icon: Icon(routeState.isEditing ? Icons.check : Icons.edit),
+              tooltip: routeState.isEditing ? '편집 완료' : '편집',
+              onPressed: () =>
+                  ref.read(routeProvider.notifier).toggleEditMode(),
+            ),
           if (_step != PlannerStep.preference)
             IconButton(
               icon: const Icon(Icons.refresh),
@@ -99,7 +107,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
       return const RouteLoading();
     }
 
-    if (routeState.error != null) {
+    if (routeState.error != null && routeState.route == null) {
       return ErrorRetry(
         message: routeState.error!,
         onRetry: () => ref.read(routeProvider.notifier).generateRoute(),
@@ -111,6 +119,10 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     }
 
     final route = routeState.route!;
+
+    if (routeState.isEditing) {
+      return EditableRouteTimeline(places: route.places);
+    }
 
     if (isMobile(context)) {
       return _buildMobileRouteView(route);
@@ -124,6 +136,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
         Positioned.fill(
           child: RouteMap(
             places: route.places,
+            segments: route.segments,
             selectedIndex: _selectedPlaceIndex,
             onMarkerTap: (index) {
               setState(() => _selectedPlaceIndex = index);
